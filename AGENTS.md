@@ -7,15 +7,18 @@ default Creator Profile (content rules are data, not engine code).
 ## Layout
 
 ```
+packages/
+  content-projects/   service owner: contentProjects (Phase 2)
+  content-workflows/  service owner: contentWorkflows (Phase 3)
 lib/
-  index.js            plugin assembler (host apply)
-  client.js           browser bundle (UI via official Slots + Remote namespaces)
+  index.js            aggregator apply (host) — injects both provider services
+  client.js           browser bundle (UI via official Slots + contentIntelligence Remote)
   style-rules.json    default style engine rules (package fallback)
   host/
-    projects.js       ContentProjects — project.json + artifacts + state + binding
-    workflows.js      ContentWorkflows — actions + stage guards
-    intelligence.js   ContentIntelligence — knowledge/style/critic/status
-    settings.js       durable settings namespace
+    projects.js       ADAPTER → ctx.contentProjects (never provides)
+    workflows.js      ADAPTER → ctx.contentWorkflows (never provides)
+    intelligence.js   ContentIntelligence — knowledge/style/critic/status (owned)
+    settings.js       durable settings namespace (owned)
 profiles/maomao/      default Creator Profile (knowledge + style-rules.json)
 templates/workspace/  scaffold for user workspaces (AGENTS.md, knowledge, skills)
 skills/               shipped skills (xhs-writing, canva-carousel, publish-check, investment-judgment)

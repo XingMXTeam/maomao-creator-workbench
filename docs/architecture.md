@@ -29,14 +29,16 @@ projects/<slug>/        single source of truth per content project
 
 ## Responsibility boundaries
 
-| Module | Owns | Never touches |
+| Service | Owner plugin | Workbench role |
 |---|---|---|
-| `lib/host/projects.js` — ContentProjects | project.json, artifact files, status/stage, session binding | content logic |
-| `lib/host/workflows.js` — ContentWorkflows | actions research/facts/thesis/draft/publish-check, stage guards, workflow state | content itself |
-| `lib/host/intelligence.js` — ContentIntelligence | knowledge schema & on-demand loading, style rules, quality standard, Critic, context routing | project state files |
-| `lib/host/settings.js` | durable user settings (workspace root / series / platforms / profile) | — |
+| `contentProjects` | `@maomao/content-projects` (Phase 2) | injected; `lib/host/projects.js` is an adapter |
+| `contentWorkflows` | `@maomao/content-workflows` (Phase 3) | injected; `lib/host/workflows.js` is an adapter |
+| `contentIntelligence` | `maomao-creator-workbench` | owned (`lib/host/intelligence.js`) |
+| settings namespace | `maomao-creator-workbench` | owned (`lib/host/settings.js`) |
 
-The three modules are separate files; the plugin `apply()` is a thin assembler.
+The workbench `apply()` is a thin aggregator: it never constructs
+ContentProjectsService / ContentWorkflowsService (Cordis rejects duplicate
+service registration).
 
 ## Extension points used (verified against the live runtime)
 

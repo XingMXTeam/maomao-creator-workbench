@@ -70,7 +70,11 @@ async function main() {
 	const pkgDir = join(dshHome, "profiles", "node_modules", "maomao-creator-workbench");
 	ok("clean install: package on disk", await exists(join(pkgDir, "package.json")) && await exists(join(pkgDir, "lib", "index.js")) && await exists(join(pkgDir, "lib", "client.js")));
 	const patch = await readFile(join(dshHome, "profiles", "web", "cordis.patch.yml"), "utf8");
-	ok("clean install: only the workbench row mounted", patch.includes("maomao-creator-workbench") && !patch.includes("content-projects"), patch);
+	ok("clean install: all three rows mounted (aggregator)",
+		patch.includes("maomao-creator-workbench")
+		&& patch.includes("@maomao/content-projects")
+		&& patch.includes("@maomao/content-workflows")
+		&& !patch.includes("content-intelligence"), patch);
 	ok("clean install: profile shipped", await exists(join(pkgDir, "profiles", "maomao", "profile.json")));
 	ok("clean install: templates shipped", await exists(join(pkgDir, "templates", "workspace", "AGENTS.md")));
 	const wsEntries = await readdir(workspace);
@@ -82,9 +86,12 @@ async function main() {
 
 	// 4) Uninstall leaves user content alone.
 	const uninstallOut = await run(NODE, [join(ROOT, "scripts", "uninstall-local.mjs")], { DSH_HOME: dshHome });
-	ok("clean install: uninstall removed the package", !(await exists(pkgDir)));
+	ok("clean install: uninstall removed the workbench package", !(await exists(pkgDir)));
+	ok("clean install: uninstall removed provider packages",
+		!(await exists(join(dshHome, "profiles", "node_modules", "@maomao", "content-projects")))
+		&& !(await exists(join(dshHome, "profiles", "node_modules", "@maomao", "content-workflows"))));
 	ok("clean install: uninstall kept user workspace", await exists(join(workspace, "AGENTS.md")) && await exists(join(workspace, "knowledge")));
-	ok("clean install: uninstall removed the row", !(await readFile(join(dshHome, "profiles", "web", "cordis.patch.yml"), "utf8")).includes("maomao-creator-workbench"));
+	ok("clean install: uninstall removed every row", !(await readFile(join(dshHome, "profiles", "web", "cordis.patch.yml"), "utf8")).match(/maomao|content-projects|content-workflows/));
 
 	// 5) Re-install is idempotent-safe after uninstall (fresh again).
 	const reinstallOut = await run(NODE, [join(ROOT, "scripts", "install-local.mjs"), "--workspace", workspace], { DSH_HOME: dshHome });

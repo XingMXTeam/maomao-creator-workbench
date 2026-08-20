@@ -9,13 +9,13 @@ import {
 	ContentProjectsService,
 	templateFor,
 	PROJECT_FILE_NAMES
-} from "../../lib/host/projects.js";
+} from "@maomao/content-projects";
 import {
 	ContentWorkflowsService,
 	ACTION_GUARD,
 	isBlankArtifact,
 	WorkflowError
-} from "../../lib/host/workflows.js";
+} from "@maomao/content-workflows";
 import {
 	ContentIntelligenceService,
 	resolveKnowledgePlan,

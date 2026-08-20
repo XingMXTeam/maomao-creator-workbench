@@ -9,8 +9,8 @@
 import assert from "node:assert/strict";
 import { writeFile, readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { ContentProjectsService } from "../../lib/host/projects.js";
-import { ContentWorkflowsService } from "../../lib/host/workflows.js";
+import { ContentProjectsService } from "@maomao/content-projects";
+import { ContentWorkflowsService } from "@maomao/content-workflows";
 import { ContentIntelligenceService } from "../../lib/host/intelligence.js";
 import { makeFakeCtx, makeTempWorkspace, makeFakeAgent, rm } from "../helpers.mjs";
 

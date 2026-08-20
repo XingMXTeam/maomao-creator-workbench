@@ -78,8 +78,18 @@ DeepSeek Harness
 ContentProject ──► Workflow ──► Agent ──► Artifacts
 ```
 
-一个包、一行插件。host 端按职责分文件（projects / workflows / intelligence /
-settings）；浏览器 UI 全部走官方 Slot 注册，**不打任何 core bundle patch**。
+三个小插件、每个服务单一 owner（聚合设计）：
+
+| 服务 | Owner |
+|---|---|
+| `contentProjects` | `@maomao/content-projects` |
+| `contentWorkflows` | `@maomao/content-workflows` |
+| `contentIntelligence` + UI + 设置 | `maomao-creator-workbench` |
+
+workbench 是**聚合插件**：注入两个 provider 服务，只拥有 Creator UI
+（工作台 Tab / Dashboard / ProjectDetail / 设置卡，全部走官方 Slot）、
+Content Intelligence 与 Creator Profile。任何服务都不会重复注册，**不打任何
+core bundle patch**。
 
 ## 自定义
 

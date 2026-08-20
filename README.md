@@ -82,9 +82,18 @@ Maomao Creator Workbench Plugin
 ContentProject ──► Workflow ──► Agent ──► Artifacts
 ```
 
-One package, one plugin row. Host modules stay separated by responsibility
-(projects / workflows / intelligence / settings). The browser UI lives in the
-plugin and registers through official slots — no core bundle patches.
+Three small plugins with one ownership per service (aggregator design):
+
+| Service | Owner |
+|---|---|
+| `contentProjects` | `@maomao/content-projects` |
+| `contentWorkflows` | `@maomao/content-workflows` |
+| `contentIntelligence` + UI + settings | `maomao-creator-workbench` |
+
+The workbench is the **aggregator**: it injects the two provider services and
+owns only the Creator UI (Workbench tab / Dashboard / ProjectDetail / Settings
+card, all through official slots), Content Intelligence, and Creator Profiles.
+No service is registered twice; no Harness bundle is patched.
 
 ## Customize
 

@@ -8,7 +8,7 @@
 import assert from "node:assert/strict";
 import { writeFile, readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { ContentProjectsService } from "../../lib/host/projects.js";
+import { ContentProjectsService } from "@maomao/content-projects";
 import { makeFakeCtx, makeTempWorkspace, rm } from "../helpers.mjs";
 
 const INDEX = JSON.parse(await readFile("profiles/maomao/knowledge/index.json", "utf8"));
