@@ -25,6 +25,7 @@ import {
 	STYLE_RULES_PSEUDO_PATH,
 	CRITIC_ACTION
 } from "../../lib/host/intelligence.js";
+import { ContentManagerService, buildContentContextSection, CONTENT_ARTIFACTS } from "../../lib/host/content-manager.js";
 import { makeFakeCtx, makeTempWorkspace, seedProject, makeFakeAgent, rm } from "../helpers.mjs";
 
 const INDEX = JSON.parse(await readFile("profiles/maomao/knowledge/index.json", "utf8"));
@@ -178,6 +179,43 @@ function ok(name, cond, extra = "") {
 	ok("projects: list returns created", list.length === 1 && list[0].slug === project.slug);
 	const detail = await projects.get(project.slug);
 	ok("projects: 8 artifact files", PROJECT_FILE_NAMES.length === 7 && typeof detail.files["draft.md"] === "string");
+	await rm(root, { recursive: true, force: true });
+}
+
+console.log(`\nUnit: ${passed} passed.`);
+
+// ── 11. ContentManager: CRUD + artifacts + agent context ────────────────────
+{
+	const root = await makeTempWorkspace({ knowledgeIndex: INDEX });
+	const projects = new ContentProjectsService(makeFakeCtx(), { root });
+	const ctx = makeFakeCtx({
+		contentProjects: projects,
+		agents: { get: () => makeFakeAgent() }
+	});
+	const cm = new ContentManagerService(ctx, {});
+	const { item } = await cm.create({ title: "为什么 AI 视频工具流行", type: "video" });
+	ok("content: create item", item.id.length > 0 && item.type === "video" && item.status === "idea");
+
+	const { items } = await cm.list();
+	ok("content: list contains created", items.length === 1 && items[0].id === item.id);
+
+	const updated = await cm.update(item.id, { title: "新标题", status: "editing", videoPath: "/Users/demo/Movies/视频项目/demo.mp4" });
+	ok("content: update meta", updated.item.title === "新标题" && updated.item.status === "editing");
+
+	await cm.writeArtifact(item.id, "script.md", "# 脚本\n\n口语化开场……");
+	await cm.writeArtifact(item.id, "subtitle.srt", "1\n00:00:00,000 --> 00:00:03,000\n大家好\n");
+	const detail = await cm.get(item.id);
+	ok("content: artifacts round-trip", detail.artifacts["script.md"].includes("口语化") && detail.artifacts["subtitle.srt"].includes("大家好"));
+	ok("content: all artifacts present", CONTENT_ARTIFACTS.every((name) => typeof detail.artifacts[name] === "string"));
+
+	await cm.setCurrent(item.id);
+	const current = await cm.current();
+	ok("content: agent context injected", current.section.includes("新标题") && current.section.includes("脚本") && current.section.includes("demo.mp4"));
+	ok("content: section builder", buildContentContextSection(updated.item, { "script.md": "测试脚本" }).includes("测试脚本"));
+
+	await cm.remove(item.id);
+	const after = await cm.list();
+	ok("content: remove clears item", after.items.length === 0);
 	await rm(root, { recursive: true, force: true });
 }
 
