@@ -1,0 +1,188 @@
+{
+  "version": 1,
+  "name": "毛毛星 Style Engine",
+  "description": "内容质量自动检查规则。来源：毛毛星内容工作流（AGENTS.md / workflows/xhs-pipeline.md / knowledge 分层）。由 @maomao/content-intelligence 加载，供 Critic 与 UI 使用。",
+  "positioning": {
+    "identity": ["互联网大厂前端工程师", "AI Builder", "长期投资者", "内容创作者"],
+    "domains": ["AI", "科技公司", "投资", "财富认知", "商业观察"],
+    "oneLiner": "懂行的朋友，不是财经博主。"
+  },
+  "ruleGroups": [
+    {
+      "id": "writing-style",
+      "label": "写作风格",
+      "priority": 1,
+      "must": [
+        "平和自然",
+        "像朋友交流",
+        "普通人可以理解",
+        "信息密度高",
+        "不营销",
+        "不制造焦虑"
+      ],
+      "forbidden": ["博主腔", "夸张标题党", "空洞鸡汤", "纯概念堆砌"],
+      "checks": [
+        {
+          "id": "short-sentences",
+          "desc": "一句一个意思；超过 30 字的长句拆开",
+          "severity": "warn"
+        },
+        {
+          "id": "explain-terms",
+          "desc": "专业术语紧跟一句大白话解释（例：「建仓——就是开始买」）",
+          "severity": "warn"
+        },
+        {
+          "id": "concrete-numbers",
+          "desc": "用具体数字（3,250 亿美元）而非模糊词（很多钱/很久）",
+          "severity": "warn"
+        },
+        {
+          "id": "emoji-restraint",
+          "desc": "emoji 每段 ≤ 1–2 个",
+          "severity": "warn"
+        },
+        {
+          "id": "forbidden-phrases",
+          "desc": "禁用词：深度好文 / 赋能 / 格局打开 / 干货满满 / 震惊 / 必看 / 速看 / 你懂的",
+          "keywords": ["深度好文", "赋能", "格局打开", "干货满满", "震惊", "必看", "速看", "你懂的"],
+          "severity": "error"
+        },
+        {
+          "id": "no-absolutes",
+          "desc": "禁止绝对化表述：一定 / 必然 / 稳赚 / 毫无风险",
+          "keywords": ["一定", "必然", "稳赚", "毫无风险"],
+          "severity": "error"
+        },
+        {
+          "id": "no-financial-promise",
+          "desc": "禁止金融承诺：跟我买 / 保证收益 / 必涨",
+          "keywords": ["跟我买", "保证收益", "必涨"],
+          "severity": "error"
+        }
+      ]
+    },
+    {
+      "id": "title",
+      "label": "标题规则",
+      "priority": 2,
+      "must": ["有用户问题", "有具体对象", "有冲突或者反差"],
+      "forbidden": ["XXX值得关注", "未来机会巨大", "值得长期关注"],
+      "checks": [
+        {
+          "id": "title-length",
+          "desc": "标题 ≤ 20 字",
+          "severity": "warn"
+        },
+        {
+          "id": "title-hook",
+          "desc": "包含数字 / 悬念 / 反常识 / 痛点，至少一个",
+          "severity": "warn"
+        },
+        {
+          "id": "title-clickbait",
+          "desc": "禁止标题党承诺：必看 / 震惊 / 看完少走十年弯路",
+          "keywords": ["必看", "震惊", "看完少走十年弯路"],
+          "severity": "error"
+        },
+        {
+          "id": "title-empty-value",
+          "desc": "禁止无价值标题句式：「XXX值得关注」「未来机会巨大」「值得长期关注」——没有用户问题、具体对象、冲突，一律打回",
+          "severity": "error"
+        }
+      ]
+    },
+    {
+      "id": "structure",
+      "label": "正文结构",
+      "priority": 3,
+      "recommended": ["问题引入", "背景事实", "核心矛盾", "数据和案例", "我的判断", "投资者影响"],
+      "checks": [
+        {
+          "id": "opening-hook",
+          "desc": "开头 1–2 句点出矛盾或反常识",
+          "severity": "warn"
+        },
+        {
+          "id": "counter-view",
+          "desc": "有反方视角（至少 1 段），体现判断质量",
+          "severity": "warn"
+        },
+        {
+          "id": "takeaway",
+          "desc": "每篇至少 1 个「可带走的东西」：清单 / 表格 / 数字 / 判断框架",
+          "severity": "warn"
+        },
+        {
+          "id": "length-range",
+          "desc": "小红书正文 400–800 字",
+          "severity": "warn"
+        }
+      ]
+    },
+    {
+      "id": "judgment",
+      "label": "判断规则",
+      "priority": 0,
+      "requiredAnswers": [
+        "这件事情本质是什么？",
+        "为什么现在发生？",
+        "对普通人/投资者有什么影响？",
+        "我的判断是什么？"
+      ],
+      "forbiddenConclusions": ["机会与风险并存", "长期来看值得关注"],
+      "checks": [
+        {
+          "id": "four-questions",
+          "desc": "文章最后必须回答四问：本质 / 为什么现在 / 对普通人影响 / 我的判断；缺任意一问 = 结构不完整",
+          "severity": "error"
+        },
+        {
+          "id": "no-empty-conclusion",
+          "desc": "禁止无信息量结论：「机会与风险并存」「长期来看值得关注」",
+          "keywords": ["机会与风险并存", "长期来看值得关注", "值得长期关注"],
+          "severity": "error"
+        },
+        {
+          "id": "falsifiable-claim",
+          "desc": "结论必须是可被反驳的判断题，不是复述事实或正确但无趣的总结",
+          "severity": "error"
+        }
+      ]
+    },
+    {
+      "id": "investment",
+      "label": "投资内容检查",
+      "priority": 0,
+      "checks": [
+        {
+          "id": "analysis-vs-stock",
+          "desc": "区分「公司分析」与「股票判断」：分析公司质地 ≠ 建议买入",
+          "severity": "error"
+        },
+        {
+          "id": "no-fake-positions",
+          "desc": "不虚构持仓；不写收益承诺",
+          "severity": "error"
+        },
+        {
+          "id": "judgment-basis",
+          "desc": "判断必须有依据：数据（注明来源与口径）+ 推理链",
+          "severity": "error"
+        },
+        {
+          "id": "risk-disclaimer",
+          "desc": "投资类内容结尾包含风险提示：「以上仅为信息整理与个人观点，不构成投资建议。市场有风险，决策需独立判断。」",
+          "severity": "error"
+        }
+      ]
+    }
+  ],
+  "critic": {
+    "scoreThresholds": {
+      "publish": 85,
+      "minorEdit": 70
+    },
+    "dimensions": ["事实可靠性", "观点质量", "用户价值", "风格检查", "投资内容检查"]
+  }
+}

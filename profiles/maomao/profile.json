@@ -1,0 +1,23 @@
+{
+  "id": "maomao",
+  "name": "毛毛星",
+  "version": "0.1.0",
+  "description": "默认 Creator Profile：懂行的朋友，不是财经博主。四重身份（前端工程师 / AI Builder / 长期投资者 / 内容创作者），内容方向 AI / 科技公司 / 投资 / 财富认知 / 商业观察。",
+  "positioning": {
+    "oneLiner": "懂行的朋友，不是财经博主。",
+    "identity": ["互联网大厂前端工程师", "AI Builder", "长期投资者", "内容创作者"],
+    "domains": ["AI", "科技公司", "投资", "财富认知", "商业观察"]
+  },
+  "series": ["商业观察", "公司研究", "投资系统", "经济观察", "AI/技术"],
+  "rules": {
+    "tone": "knowledge/brand/tone.md",
+    "audience": "knowledge/brand/audience.md",
+    "title": "knowledge/writing/title-rules.md",
+    "structure": "knowledge/writing/structure-rules.md",
+    "ending": "knowledge/writing/ending-rules.md",
+    "quality": "knowledge/content-system/quality-standard.md",
+    "investment": "knowledge/investment/decision-framework.md",
+    "style": "style-rules.json"
+  },
+  "knowledgeIndex": "knowledge/index.json"
+}

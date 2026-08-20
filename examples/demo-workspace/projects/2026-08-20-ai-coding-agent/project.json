@@ -1,0 +1,19 @@
+{
+  "id": "demo-project-ai-coding-agent-001",
+  "title": "为什么 AI Coding Agent 越来越流行？",
+  "slug": "2026-08-20-ai-coding-agent",
+  "series": "AI/技术",
+  "status": "draft",
+  "stage": "draft",
+  "createdAt": "2026-08-20T01:00:00.000Z",
+  "updatedAt": "2026-08-20T02:30:00.000Z",
+  "coreQuestion": "AI Coding Agent 从「玩具」变成「同事」——是模型能力跃迁，还是工程化终于补上了短板？",
+  "coreConflict": "写代码的门槛从「会编程」变成「会提需求」；Agent 越强，人的工作从写代码变成审代码",
+  "angle": "用「3 个转变」讲清楚：能力跃迁 / 工具链成熟 / 工作方式重构，并给出一个判断框架",
+  "workflow": {
+    "research": { "status": "success", "startedAt": "2026-08-20T01:05:00.000Z", "completedAt": "2026-08-20T01:20:00.000Z", "error": null },
+    "facts": { "status": "success", "startedAt": "2026-08-20T01:20:00.000Z", "completedAt": "2026-08-20T01:30:00.000Z", "error": null },
+    "thesis": { "status": "success", "startedAt": "2026-08-20T01:30:00.000Z", "completedAt": "2026-08-20T01:40:00.000Z", "error": null },
+    "draft": { "status": "success", "startedAt": "2026-08-20T02:00:00.000Z", "completedAt": "2026-08-20T02:30:00.000Z", "error": null }
+  }
+}

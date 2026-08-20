@@ -1,0 +1,60 @@
+{
+  "name": "maomao-creator-workbench",
+  "version": "0.1.0",
+  "description": "Turn DeepSeek Harness into a project-based AI creator workspace. Topic → Research → Facts → Thesis → Draft → Critic → Publish.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./style-rules.json": "./lib/style-rules.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "profiles",
+    "templates",
+    "skills",
+    "docs",
+    "README.md",
+    "README.zh-CN.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md"
+  ],
+  "scripts": {
+    "install:local": "node scripts/install-local.mjs",
+    "uninstall:local": "node scripts/uninstall-local.mjs",
+    "verify": "node scripts/verify.mjs",
+    "test": "node tests/run-all.mjs",
+    "test:unit": "node tests/unit/run.mjs",
+    "test:integration": "node tests/integration/run.mjs",
+    "test:persistence": "node tests/persistence/run.mjs",
+    "test:cold-boot": "node tests/cold-boot/run.mjs",
+    "test:clean-install": "node tests/clean-install/run.mjs",
+    "secret-scan": "node scripts/secret-scan.mjs"
+  },
+  "dsh": {
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-api-gateway",
+        "@deepseek-ai/dsh-typert-registry",
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-ui-settings"
+      ]
+    }
+  },
+  "dependencies": {
+    "@deepseek-ai/cordis": "^4.0.1"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

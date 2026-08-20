@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "description": "毛毛星 Content Knowledge Layer — Schema 与按需加载索引。加载器由 @maomao/content-intelligence 提供（knowledgePlan）。",
+  "root": "knowledge",
+  "categories": {
+    "brand": {
+      "label": "品牌与定位",
+      "files": {
+        "positioning.md": {
+          "label": "账号定位",
+          "triggers": ["定位", "身份", "内容方向", "positioning"],
+          "actions": ["topic", "thesis", "draft", "critic"]
+        },
+        "audience.md": {
+          "label": "读者画像",
+          "triggers": ["读者", "受众", "画像", "收藏", "评论"],
+          "actions": ["topic", "draft", "critic"]
+        },
+        "tone.md": {
+          "label": "语感与语气",
+          "triggers": ["语感", "语气", "风格", "禁用语", "文案规范"],
+          "actions": ["draft", "critic"]
+        }
+      }
+    },
+    "content-system": {
+      "label": "内容体系",
+      "files": {
+        "series.md": {
+          "label": "系列与选题体系",
+          "triggers": ["选题", "系列", "评分", "核心矛盾", "选题雷达", "公司研究"],
+          "actions": ["topic", "research", "thesis"]
+        },
+        "workflow.md": {
+          "label": "内容流水线与动作",
+          "triggers": ["流水线", "流程", "动作", "workflow", "stage"],
+          "actions": ["topic", "research", "facts", "thesis", "draft", "critic", "publish-check"]
+        },
+        "quality-standard.md": {
+          "label": "质量标准（审查维度）",
+          "triggers": ["质量标准", "审查", "critic", "评分", "发布门槛"],
+          "actions": ["critic", "publish-check"]
+        }
+      }
+    },
+    "writing": {
+      "label": "写作规范",
+      "files": {
+        "title-rules.md": {
+          "label": "标题规则",
+          "triggers": ["标题", "钩子", "title"],
+          "actions": ["draft", "critic", "publish-check"]
+        },
+        "structure-rules.md": {
+          "label": "正文结构",
+          "triggers": ["结构", "正文", "段落", "结尾四问"],
+          "actions": ["draft", "critic"]
+        },
+        "ending-rules.md": {
+          "label": "结尾规则",
+          "triggers": ["结尾", "开放问题", "行动号召"],
+          "actions": ["draft", "critic"]
+        }
+      }
+    },
+    "visual": {
+      "label": "视觉规范",
+      "files": {
+        "cover-rules.md": {
+          "label": "封面规则",
+          "triggers": ["封面", "cover"],
+          "actions": ["canva", "publish-check"]
+        },
+        "carousel-rules.md": {
+          "label": "图文结构规则",
+          "triggers": ["图文", "轮播", "carousel"],
+          "actions": ["canva"]
+        },
+        "canva-rules.md": {
+          "label": "Canva 版式规则",
+          "triggers": ["canva", "版式", "视觉"],
+          "actions": ["canva"]
+        }
+      }
+    },
+    "investment": {
+      "label": "投资内容纪律",
+      "files": {
+        "company-analysis.md": {
+          "label": "公司分析方法",
+          "triggers": ["公司", "财报", "分析", "个股"],
+          "actions": ["research", "thesis", "critic"]
+        },
+        "valuation-framework.md": {
+          "label": "估值框架",
+          "triggers": ["估值", "市盈率", "pe", "现金流", "dcf"],
+          "actions": ["research", "thesis", "critic"]
+        },
+        "decision-framework.md": {
+          "label": "投资判断纪律",
+          "triggers": ["投资", "股票", "基金", "判断", "合规", "风险提示"],
+          "actions": ["research", "facts", "thesis", "draft", "critic", "publish-check"]
+        }
+      }
+    },
+    "examples": {
+      "label": "示例",
+      "files": {
+        "README.md": {
+          "label": "示例索引与 critique 格式样例",
+          "triggers": ["示例", "样例", "格式"],
+          "actions": ["critic"]
+        }
+      }
+    }
+  },
+  "loadGroups": {
+    "topic": ["brand/positioning.md", "brand/audience.md", "content-system/series.md"],
+    "research": ["content-system/series.md", "content-system/workflow.md", "investment/decision-framework.md"],
+    "写公司研究": ["investment/company-analysis.md", "content-system/series.md", "writing/structure-rules.md"],
+    "写普通商业观察": ["brand/tone.md", "writing/title-rules.md"],
+    "company-analysis": ["investment/company-analysis.md", "investment/valuation-framework.md", "content-system/series.md", "writing/structure-rules.md"],
+    "business-observation": ["brand/tone.md", "writing/title-rules.md", "brand/audience.md"],
+    "facts": ["investment/decision-framework.md", "content-system/workflow.md"],
+    "thesis": ["investment/decision-framework.md", "content-system/series.md", "writing/structure-rules.md"],
+    "draft": ["brand/tone.md", "brand/audience.md", "writing/title-rules.md", "writing/structure-rules.md", "writing/ending-rules.md"],
+    "critic": ["rules/style-rules.json", "content-system/quality-standard.md", "writing/title-rules.md", "writing/structure-rules.md", "brand/tone.md"],
+    "publish-check": ["content-system/quality-standard.md", "writing/title-rules.md", "investment/decision-framework.md"]
+  },
+  "actionKnowledgeRules": {
+    "draft": "加载 brand/tone + writing 全部规则 + 项目 thesis；不加载 investment 全文除非涉及投资",
+    "critic": "加载 style-rules.json + quality-standard + writing 规则；投资类内容必加 investment/decision-framework"
+  }
+}
