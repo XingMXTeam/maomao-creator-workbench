@@ -87,6 +87,25 @@ async function ensureRow(patchPath, pkg) {
 	console.log(`✓ plugin row added: ${packageName} → ${patchPath}`);
 }
 
+/** Marker + block for the lifecycle-managed ui-sidebar disable. */
+const UI_SIDEBAR_DISABLE_MARK = "# maomao-creator-workbench: ui-sidebar disabled (lifecycle-managed)";
+const UI_SIDEBAR_DISABLE_BLOCK = `${UI_SIDEBAR_DISABLE_MARK}\n- id: ui-sidebar\n  disabled: true`;
+
+/** Idempotently ensure the ui-sidebar disable block sits at the patch top. */
+async function ensureUiSidebarDisabled(patchPath) {
+	let patch = "";
+	if (await exists(patchPath)) patch = await readFile(patchPath, "utf8");
+	if (patch.includes(UI_SIDEBAR_DISABLE_MARK)) return;
+	const block = `${UI_SIDEBAR_DISABLE_BLOCK}\n`;
+	const trimmed = patch.trim();
+	if (trimmed === "" || trimmed === "[]") {
+		await writeFile(patchPath, block, "utf8");
+	} else {
+		await writeFile(patchPath, `${block}${patch.trimStart()}`, "utf8");
+	}
+	console.log("✓ ui-sidebar disabled (tabbed sidebar owns the left column)");
+}
+
 async function main() {
 	const args = parseArgs(process.argv.slice(2));
 	const dshHome = process.env.DSH_HOME || join(homedir(), ".dsh");
@@ -127,6 +146,9 @@ async function main() {
 	for (const pkg of PACKAGES) {
 		await ensureRow(patchPath, pkg);
 	}
+
+	// 2b) Tabbed sidebar owns the left column (lifecycle-managed disable).
+	await ensureUiSidebarDisabled(patchPath);
 
 	// 3) Scaffold the workspace from the workbench templates (missing files only).
 	const templates = join(ROOT, "templates", "workspace");

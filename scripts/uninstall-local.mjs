@@ -40,6 +40,8 @@ async function exists(path) {
 	}
 }
 
+const UI_SIDEBAR_DISABLE_MARK = "# maomao-creator-workbench: ui-sidebar disabled (lifecycle-managed)";
+
 async function main() {
 	const args = parseArgs(process.argv.slice(2));
 	const dshHome = process.env.DSH_HOME || join(homedir(), ".dsh");
@@ -62,6 +64,16 @@ async function main() {
 		console.log(`✓ plugin rows removed from ${patchPath}`);
 	} else {
 		console.log(`- no patch file at ${patchPath}`);
+	}
+
+	// 1b) Remove the lifecycle-managed ui-sidebar disable (never leave the
+	// stock sidebar off after uninstall — oil-creator warns about this residue).
+	if (await exists(patchPath)) {
+		const current = await readFile(patchPath, "utf8");
+		const lines = current.split("\n").filter((line) => !line.includes(UI_SIDEBAR_DISABLE_MARK) && !(line.trim() === "- id: ui-sidebar") && !(line.trim() === "disabled: true"));
+		const next = lines.join("\n").replace(/\n{3,}/g, "\n\n").trimEnd();
+		await writeFile(patchPath, next === "" ? "" : `${next}\n`, "utf8");
+		console.log("✓ ui-sidebar disable removed (stock sidebar restored on uninstall)");
 	}
 
 	// 2) Remove the packages (plugin code only; user content untouched).
